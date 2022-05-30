@@ -1,0 +1,81 @@
+Para construir a imagem:
+$ docker build -t kub-app-example .
+
+Subir para repositório remoto:
+$ docker tag kub-app-example ricardoferrari/kub-app-example
+$ docker push ricardoferrari/kub-app-example
+
+Checar o status do ambiente Kubernet:
+$ minikube status
+Se não estiver ativo executar no PowerShell como administrador:
+$ minikube start --driver=docker
+
+Para gerenciar o ambiente
+$ kubectl create deployment first-app --image=ricardoferrari/kub-app-example
+
+Para verificar os deployments
+$ kubectl get deployments
+$ kubectl get pods
+
+Para deletar, caso algo de errado aconteça
+$ kubectl delete deployment first-app
+
+Inicializa o dashboard:
+$ minikube dashboard
+
+Expõe o pod através de um serviço (Load Balancer)
+$ kubectl expose deployment first-app --type=LoadBalancer --port=8080
+Verifica se serviço está rodando:
+$ kubectl get services
+Para deletar, caso algo de errado aconteça
+$ kubectl delete services first-app
+
+Dar acesso ao serviço LoadBalancer no host local
+$ minikube tunnel
+ou para NodePort
+$ minikube service --url <service-name>
+
+Definindo o Scalling do deployment
+$ kubectl scale deployment/first-app --replicas=3
+
+Para renovar com imagem atualizada:
+$ docker build -t kub-app-example:version .
+$ docker tag kub-app-example:version ricardoferrari/kub-app-example:version
+$ docker push ricardoferrari/kub-app-example:version
+$ kubectl set image deployment/first-app kub-app-example=ricardoferrari/kub-app-example:version
+
+
+Forma declarativa:
+$ kubectl apply -f deployment.yaml
+$ kubectl apply -f service.yaml
+
+Para deletar utilizando labels de grupos:
+$ kubectl delete -l group=example
+
+*****************************************
+/********** Configuration **************/
+Para aplicar as configuração a partir do config.yaml
+$ kubectl create configmap demo-config --namespace=demo --from-file=config.yaml
+Para gerar o arquivo de configuração na forma declarativa para o arquivo demo-config.yaml
+$ kubectl get configmap/demo-config -o yaml >demo-config.yaml
+$ kubectl apply -f demo-config.yaml
+
+Reiniciar deployment para obter novos valores do configmap
+$ kubectl rollout restart deployment story-deployment
+
+Exibir os logs do Pod selecionado
+$ kubectl logs -f podname
+
+*****************************************
+/********** Jobs **************/
+Executa ao aplicar o yaml do Jobs
+$ kubectl apply -f job.yaml
+Mostra dados da execução
+$ kubectl describe jobs/data-mover
+$ kubectl get jobs
+
+Listar todos logs de todos os pods:
+1 - Criar variavel pods
+$ $pods = kubectl get pods --selector=job-name=data-mover --output=jsonpath='{.items[*].metadata.name}'
+$ echo $pods
+$ kubectl logs -f $pods

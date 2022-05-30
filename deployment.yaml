@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: story-deployment
+spec: 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: story
+  template:
+    metadata:
+      labels:
+        app: story
+    spec:
+      containers:
+        - name: story
+          image: ricardoferrari/kub-data-demo:4
+          env:
+            - name: SUCCESS
+              valueFrom:
+                configMapKeyRef:
+                  name: demo-config
+                  key: successMessage
+            - name: MAGIC_WORD
+              valueFrom:
+                secretKeyRef:
+                  name: demo-secret
+                  key: magicWord
+          volumeMounts:
+            - mountPath: /app/story
+              name: story-volume-bind
+          resources:
+            limits:
+              cpu: "250m"
+              memory: "64Mi"
+      volumes:
+        - name: story-volume
+          emptyDir: {}
+        - name: story-volume-bind
+          hostPath:
+            path: /data
+            type: DirectoryOrCreate
