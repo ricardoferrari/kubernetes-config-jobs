@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: data-mover
+spec:
+  ttlSecondsAfterFinished: 10
+  template:
+    spec:
+      containers:
+      - name: data-mover
+        image: ricardoferrari/data-mover:11
+        command: [ "node", "app-cron.js" ]
+        volumeMounts:
+            - mountPath: /app/story
+              name: story-volume-bind
+        resources:
+                limits:
+                  cpu: "250m"
+                  memory: "64Mi"
+      restartPolicy: Never
+      volumes:
+        - name: story-volume-bind
+          hostPath:
+            path: /data
+            type: DirectoryOrCreate
+  backoffLimit: 7
+  parallelism: 1
+  completions: 1
