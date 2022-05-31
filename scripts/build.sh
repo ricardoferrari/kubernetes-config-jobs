@@ -14,9 +14,10 @@ while getopts ":hv:" option; do
 done
 
 build="docker build -t data-mover:${version} ."
-tag="docker tag data-mover:6 ricardoferrari/data-mover:${version}"
+tag="docker tag data-mover:${version} ricardoferrari/data-mover:${version}"
 push="docker push ricardoferrari/data-mover:${version}"
 
+docker login
 $build
 $tag
 $push
