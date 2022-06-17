@@ -1,0 +1,18 @@
+/********** Jobs **************/
+Job executado periodicamente
+
+Copia mensagens de "text.txt" para "compilado.txt"
+
+
+*****************************************
+Executa ao aplicar o yaml do Jobs
+$ kubectl apply -f job.yaml
+Mostra dados da execução
+$ kubectl describe jobs/data-mover
+$ kubectl get jobs
+
+Listar todos logs de todos os pods:
+1 - Criar variavel pods
+$ $pods = kubectl get pods --selector=job-name=data-mover --output=jsonpath='{.items[*].metadata.name}'
+$ echo $pods
+$ kubectl logs -f $pods

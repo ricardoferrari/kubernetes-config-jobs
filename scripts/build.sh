@@ -4,6 +4,8 @@
 while getopts ":hv:" option; do
    case $option in
         h) # display Help
+            echo "Script for building and publishing"
+            echo "Try: $ ./build.sh [-v <version>] <filename>"
             exit;;
         v) # Enter a name
             version=$OPTARG;;
