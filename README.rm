@@ -79,3 +79,13 @@ Listar todos logs de todos os pods:
 $ $pods = kubectl get pods --selector=job-name=data-mover --output=jsonpath='{.items[*].metadata.name}'
 $ echo $pods
 $ kubectl logs -f $pods
+
+********************************
+/************ Persistent Volumes
+
+Get storage classes (standard deve ser atribuido no yaml)
+$ kubectl get sc
+
+$ kubectl apply -f=host-pv.yaml
+$ kubectl apply -f=host-pvc.yaml
+$ kubectl apply -f=deployment-persistent.yaml
