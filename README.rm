@@ -89,3 +89,10 @@ $ kubectl get sc
 $ kubectl apply -f=host-pv.yaml
 $ kubectl apply -f=host-pvc.yaml
 $ kubectl apply -f=deployment-persistent.yaml
+
+********************************
+/**************** Variáveis de ambiente
+
+## As chaves e valores dos parâmetros estão no arquivo: demo-config.yaml
+
+## As chaves e valores dos segredos estão em: secret.yaml
